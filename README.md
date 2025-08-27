@@ -1,7 +1,7 @@
 # marketing_insights_superstore
 Project on Power BI that uses the Superstore dataset to deliver sales &amp; marketing insights. Focus: discount efficiency, customer loyalty, profit concentration etc.
 
-**STEP 1**
+**STEP 1** Project Goals 
 
 Audience: **Head of Sales & Marketing** – responsible for driving revenue growth, optimising discount strategy, and improving customer loyalty.
 
@@ -27,4 +27,22 @@ Project Goal  is to deliver actionable insights for the Head of Sales & Marketin
 
 There is no Discount and Profit sections, so might limit the financial analysis(not critical to current Business Questions).
 
-**STEP 3**
+**STEP 3** Dataset Preprocessing and Audit
+Missing Values: `Postal Code` has missing values (11 rows). No duplicates.
+* No invalid shipments (all Ship Dates ≥ Order Dates).
+ 5. Sales Distributions
+* **Min:** $0.44
+* **Max:** $22,638.48
+* **Mean:** $230.77
+
+Regional Coverage (U.S)
+* West: 3,140 orders
+* East: 2,785 orders
+* Central: 2,277 orders
+* South: 1,598 orders
+
+Customer Activity
+
+* **Unique Customers:** 793
+* **Average Orders per Customer:** \~6.2
+* **Most Active Customer:** 17 orders
