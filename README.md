@@ -25,4 +25,6 @@ Project Goal  is to deliver actionable insights for the Head of Sales & Marketin
   * Products: `Category`, `Sub-Category`, `Product ID`, `Product Name`
   * Transactions: `Sales`
 
+There is no Discount and Profit sections, so might limit the financial analysis(not critical to current Business Questions).
+
 **STEP 3**
