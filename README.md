@@ -41,8 +41,32 @@ Regional Coverage (U.S)
 * Central: 2,277 orders
 * South: 1,598 orders
 
-Customer Activity
-
+Customer activity
 * **Unique Customers:** 793
 * **Average Orders per Customer:** \~6.2
 * **Most Active Customer:** 17 orders
+
+
+**STEP 4 ** Star Schema 
+
+The dataset was transformed into a star schema in Power BI. This separates transactional facts from descriptive dimensions, improving performance and making business questions easier to answer.
+
+Fact Table
+	*	FactSales: Order-level data (Order ID, Customer ID, Product ID, Postal Code, Ship Mode, Order Date, Ship Date, Sales).
+
+Dimension Tables
+	*	DimCustomer: Customer ID, Name, Segment.
+	*	DimProduct: Product ID, Name, Sub-Category, Category.
+	*	DimGeo: Postal Code, City, State, Region.
+	*	DimShipMode: Shipping modes.
+	*	DimDate: Calendar table generated with DAX for time intelligence.
+
+Relationships
+	*	One-to-many (1:*) relationships from each Dimension to FactSales.
+	*	Active link: DimDate[Date] → FactSales[Order Date].
+	*	Inactive link (for flexibility): DimDate[Date] → FactSales[Ship Date] (activated in DAX with USERELATIONSHIP).
+	*	All relationships set to single direction (Dim ➜ Fact) to avoid ambiguity.
+
+Outcome
+	*	Clean separation of business entities.
+	*	Enables analysis of customer retention and regional growth with efficient slicing by customer, product, geography, and time.
