@@ -12,3 +12,17 @@ Main Business Questions:
 2. **Regional Growth Opportunities**: Which regions show untapped potential for growth, and where are marketing efforts failing?
 
 Project Goal  is to deliver actionable insights for the Head of Sales & Marketing to strengthen customer retention and loyalty and identify regions with the highest growth potential.
+
+**STEP 2** 📊 Used Dataset
+
+1. **Source:** Kaggle – Superstore Sales Dataset:.
+2. **Size:** 9,800 rows  and 18 columns.
+3. **Coverage:** Customer orders across the United States.
+4. **Key Fields:**
+  * Customer: `Customer ID`, `Customer Name`, `Segment`
+  * Orders: `Order ID`, `Order Date`, `Ship Date`, `Ship Mode`
+  * Geography: `Region`, `State`, `City`, `Postal Code`
+  * Products: `Category`, `Sub-Category`, `Product ID`, `Product Name`
+  * Transactions: `Sales`
+
+**STEP 3**
