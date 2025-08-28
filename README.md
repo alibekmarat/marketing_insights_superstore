@@ -47,7 +47,7 @@ Customer activity
 * **Most Active Customer:** 17 orders
 
 
-**STEP 4 ** Star Schema 
+**STEP 4** Star Schema 
 
 The dataset was transformed into a star schema in Power BI. This separates transactional facts from descriptive dimensions, improving performance and making business questions easier to answer.
 
