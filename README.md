@@ -184,7 +184,7 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 ```
 **STEP 8** — Dashboards
 
-## 8.1 Retention (Customer Dynamics)
+8.1 Retention (Customer Dynamics)
 
 * **Cards:** Customers, New Customers, Returning Customers
 * **Stacked column:** `DimDate[YearMonth]` vs **Sales USD (New)** & **Sales USD (Returning)**
@@ -195,14 +195,14 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
   * Values = **DistinctCount(Customer ID)**
     *(Retention % optional; counts already included.)*
 
-## 8.2 Regional Growth
+8.2 Regional Growth
 
 * **Cards:** Sales USD, Orders, Customers, AOV
 * **Column chart:** Sales by **Region**
 * **Bar chart:** Sales by **State** (Region slicer optional)
 * **Table:** Region | Sales USD | Orders | Customers | AOV | **Region Share %** | **Region Rank**
 
-## 8.3 Executive Page (one-pager)
+8.3 Executive Page (one-pager)
 
 * Top KPIs: Sales, Orders, Customers, AOV
 * Left: Sales by Region (column)
@@ -210,7 +210,7 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 * Bottom: Region performance table (with **Share %** and **Rank**)
 * Slicers: `DimDate[YearMonth]`, Region
 
-## 8.4 Recommendations (business takeaways)
+8.4 Recommendations (business takeaways)
 
 * Returning customers drive \~50%+ of sales → **loyalty program & cross-sell**
 * **East** shows higher **AOV** → focus upsell/mix strategy
@@ -245,7 +245,6 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 * Sales USD ≈ **\$2.26M**, Orders ≈ **4.9K**, Customers = **793**, AOV ≈ **\$459**
 
 
-## Notes / Limitations
-
+Notes / Limitation
 * Geography modeled at **Region/State** level using fields from Fact (postal codes contain nulls)
 * Profit-related analysis intentionally out of scope for focus (marketing/sales brief)
