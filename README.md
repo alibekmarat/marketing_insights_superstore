@@ -71,7 +71,6 @@ Outcome
 *	Clean separation of business entities.
 *	Enables analysis of customer retention and regional growth with efficient slicing by customer, product, geography, and time.
 
-
 **STEP 5** — Transformations in Power Query
 
 Goal is make the model clean, consistent, and business-ready.
@@ -101,7 +100,7 @@ Goal is make the model clean, consistent, and business-ready.
 * Cards: **Sales USD ≈ 2.26M**, **Orders ≈ 4.9K**, **Customers = 793**
 * Chart: Sales by **Region** shows 4 regions, no `(Blank)`
 
-# Step 6 — Date Table & Relationships
+**STEP 6** — Date Table & Relationships
 
 * **DimDate** (DAX):
 
@@ -129,7 +128,7 @@ Goal is make the model clean, consistent, and business-ready.
 * (Optional) Turn off **Auto Date/Time** (Options ▸ Data Load)
 
 
-# Step 7 — Core KPI Measures (DAX)
+**STEP 7** — Core KPI Measures (DAX)
 
 Create these in **FactSales**.
 
@@ -183,9 +182,7 @@ DIVIDE([Sales USD], [Region Sales (All)])
 Region Rank (by Sales) :=
 RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 ```
-
-
-# Step 8 — Dashboards
+**STEP 8** — Dashboards
 
 ## 8.1 Retention (Customer Dynamics)
 
