@@ -70,3 +70,195 @@ Relationships
 Outcome
 *	Clean separation of business entities.
 *	Enables analysis of customer retention and regional growth with efficient slicing by customer, product, geography, and time.
+
+
+**STEP 5** — Transformations in Power Query
+
+Goal is make the model clean, consistent, and business-ready.
+
+* Set data types
+
+  * `Order Date`, `Ship Date` → **Date** (Using Locale: **English (UK)** for `dd/mm/yyyy`)
+  * `Sales` → **Decimal** (renamed **Sales USD**)
+  * IDs/Geo → **Text** (incl. `Postal Code`)
+* Created columns in **FactSales**
+
+  * **OrderToShipDays** = `Ship Date – Order Date` (Add Column ▸ Date ▸ Subtract Days)
+  * **First Purchase Date (Col)** via **Merge** (grouped min Order Date per Customer and left-joined back)
+  * **Months Since First Purchase** (custom column):
+
+    ```
+    (Date.Year([Order Date]) - Date.Year([First Purchase Date (Col)])) * 12
+      + (Date.Month([Order Date]) - Date.Month([First Purchase Date (Col)]))
+    ```
+  * **Cohort Month** (Add Column ▸ Date ▸ Month ▸ Start of Month), formatted as `YYYY-MM`
+* Text cleanup: Trim, Clean, Capitalize (City/State/Names)
+* Geography choice (pragmatic): use **Region** directly from **FactSales**
+  *(Postal Code had nulls; this keeps visuals accurate and removes `(Blank)` categories.)*
+
+**Quick QA after Apply**
+
+* Cards: **Sales USD ≈ 2.26M**, **Orders ≈ 4.9K**, **Customers = 793**
+* Chart: Sales by **Region** shows 4 regions, no `(Blank)`
+
+---
+
+# Step 6 — Date Table & Relationships
+
+* **DimDate** (DAX):
+
+  ```DAX
+  DimDate =
+  ADDCOLUMNS (
+      CALENDAR ( DATE(2015,1,1), DATE(2019,12,31) ),
+      "Year", YEAR([Date]),
+      "MonthNo", MONTH([Date]),
+      "Month", FORMAT([Date], "MMM"),
+      "YearMonth", FORMAT([Date], "YYYY-MM"),
+      "Quarter", "Q" & FORMAT([Date], "Q"),
+      "Week", WEEKNUM([Date],2),
+      "IsWeekend", WEEKDAY([Date],2) >= 6
+  )
+  ```
+* Mark **DimDate** as Date table (column `Date`)
+* Relationships (single direction Dim ➜ Fact):
+
+  * `DimDate[Date] → FactSales[Order Date]` (active)
+  * `DimCustomer[Customer ID] → FactSales[Customer ID]`
+  * `DimProduct[Product ID] → FactSales[Product ID]`
+  * `DimShipMode[Ship Mode] → FactSales[Ship Mode]`
+* Sorting: `DimDate[YearMonth]` **Sort by** `MonthNo`
+* (Optional) Turn off **Auto Date/Time** (Options ▸ Data Load)
+
+---
+
+# Step 7 — Core KPI Measures (DAX)
+
+Create these in **FactSales**.
+
+```DAX
+Sales USD := SUM('FactSales'[Sales USD])
+Orders    := DISTINCTCOUNT('FactSales'[Order ID])
+Customers := DISTINCTCOUNT('FactSales'[Customer ID])
+AOV       := DIVIDE([Sales USD], [Orders])
+```
+
+**New vs Returning**
+
+```DAX
+First Purchase Date :=
+CALCULATE(
+  MIN('FactSales'[Order Date]),
+  ALLEXCEPT('FactSales','FactSales'[Customer ID])
+)
+
+New Customers :=
+CALCULATE(
+  DISTINCTCOUNT('FactSales'[Customer ID]),
+  FILTER(VALUES('FactSales'[Customer ID]),
+    [First Purchase Date] >= MIN('DimDate'[Date]) &&
+    [First Purchase Date] <= MAX('DimDate'[Date])
+  )
+)
+
+Returning Customers := [Customers] - [New Customers]
+
+Sales USD (New) :=
+CALCULATE([Sales USD],
+  FILTER(VALUES('FactSales'[Customer ID]),
+    [First Purchase Date] >= MIN('DimDate'[Date]) &&
+    [First Purchase Date] <= MAX('DimDate'[Date])
+  )
+)
+
+Sales USD (Returning) := [Sales USD] - [Sales USD (New)]
+```
+
+**Regional share & rank**
+
+```DAX
+Region Sales (All) :=
+CALCULATE([Sales USD], ALL('FactSales'[Region]))
+
+Region Share of Sales :=
+DIVIDE([Sales USD], [Region Sales (All)])
+
+Region Rank (by Sales) :=
+RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
+```
+
+---
+
+# Step 8 — Dashboards
+
+## 8.1 Retention (Customer Dynamics)
+
+* **Cards:** Customers, New Customers, Returning Customers
+* **Stacked column:** `DimDate[YearMonth]` vs **Sales USD (New)** & **Sales USD (Returning)**
+* **Cohort matrix (counts):**
+
+  * Rows = `FactSales[Cohort Month]`
+  * Columns = `FactSales[Months Since First Purchase]`
+  * Values = **DistinctCount(Customer ID)**
+    *(Retention % optional; counts already included.)*
+
+## 8.2 Regional Growth
+
+* **Cards:** Sales USD, Orders, Customers, AOV
+* **Column chart:** Sales by **Region**
+* **Bar chart:** Sales by **State** (Region slicer optional)
+* **Table:** Region | Sales USD | Orders | Customers | AOV | **Region Share %** | **Region Rank**
+
+## 8.3 Executive Page (one-pager)
+
+* Top KPIs: Sales, Orders, Customers, AOV
+* Left: Sales by Region (column)
+* Right: New vs Returning Sales by `YearMonth` (stacked column)
+* Bottom: Region performance table (with **Share %** and **Rank**)
+* Slicers: `DimDate[YearMonth]`, Region
+
+## 8.4 Recommendations (business takeaways)
+
+* Returning customers drive \~50%+ of sales → **loyalty program & cross-sell**
+* **East** shows higher **AOV** → focus upsell/mix strategy
+* **Central** underperforms vs. size → **diagnose pricing/logistics/targeting**
+* **South** smallest share → **test & learn** with controlled spend
+
+---
+
+# Step 9 — QA, Performance & Hygiene
+
+* Totals reconcile (Sales, Orders, Customers)
+* All slicers propagate; no `(Blank)` Region in visuals
+* Hide unused technical columns in Report view
+* Currency formatting (USD) + whole-number counts
+* Optional: Performance Analyzer check (no slow visuals)
+
+---
+
+# Step 10 — Assets & How to Run
+
+**Repo structure**
+
+```
+/pbix/        Superstore_Analytics.pbix
+/assets/      screenshots_exec.png, screenshots_retention.png, screenshots_regional.png
+/docs/        Executive_Summary.pdf  (optional)
+```
+
+**Open & use**
+
+1. Open PBIX in Power BI Desktop
+2. Use slicers (YearMonth, Region) to filter pages
+3. Pages: **Executive → Regional Growth → Retention → Recommendations**
+
+**At load (reference values)**
+
+* Sales USD ≈ **\$2.26M**, Orders ≈ **4.9K**, Customers = **793**, AOV ≈ **\$459**
+
+---
+
+## Notes / Limitations
+
+* Geography modeled at **Region/State** level using fields from Fact (postal codes contain nulls)
+* Profit-related analysis intentionally out of scope for focus (marketing/sales brief)
