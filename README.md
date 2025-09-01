@@ -215,10 +215,9 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 * Returning customers drive \~50%+ of sales → **loyalty program & cross-sell**
 * **East** shows higher **AOV** → focus upsell/mix strategy
 * **Central** underperforms vs. size → **diagnose pricing/logistics/targeting**
-* **South** smallest share → **test & learn** with controlled spend
+* **South** smallest share → **test & learn** with controlled spen
 
-
-# Step 9 — QA, Performance & Hygiene
+**STEP 9** — QA, Performance & Hygiene
 
 * Totals reconcile (Sales, Orders, Customers)
 * All slicers propagate; no `(Blank)` Region in visuals
@@ -226,7 +225,7 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 * Currency formatting (USD) + whole-number counts
 * Optional: Performance Analyzer check (no slow visuals)
 
-# Step 10 — Assets & How to Run
+**STEP 10** — Assets & How to Run
 
 **Repo structure**
 
@@ -235,7 +234,6 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 /assets/      screenshots_exec.png, screenshots_retention.png, screenshots_regional.png
 /docs/        Executive_Summary.pdf  (optional)
 ```
-
 **Open & use**
 
 1. Open PBIX in Power BI Desktop
