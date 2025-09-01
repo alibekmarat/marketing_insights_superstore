@@ -101,8 +101,6 @@ Goal is make the model clean, consistent, and business-ready.
 * Cards: **Sales USD ≈ 2.26M**, **Orders ≈ 4.9K**, **Customers = 793**
 * Chart: Sales by **Region** shows 4 regions, no `(Blank)`
 
----
-
 # Step 6 — Date Table & Relationships
 
 * **DimDate** (DAX):
@@ -130,7 +128,6 @@ Goal is make the model clean, consistent, and business-ready.
 * Sorting: `DimDate[YearMonth]` **Sort by** `MonthNo`
 * (Optional) Turn off **Auto Date/Time** (Options ▸ Data Load)
 
----
 
 # Step 7 — Core KPI Measures (DAX)
 
@@ -187,7 +184,6 @@ Region Rank (by Sales) :=
 RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 ```
 
----
 
 # Step 8 — Dashboards
 
@@ -224,7 +220,6 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 * **Central** underperforms vs. size → **diagnose pricing/logistics/targeting**
 * **South** smallest share → **test & learn** with controlled spend
 
----
 
 # Step 9 — QA, Performance & Hygiene
 
@@ -233,8 +228,6 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 * Hide unused technical columns in Report view
 * Currency formatting (USD) + whole-number counts
 * Optional: Performance Analyzer check (no slow visuals)
-
----
 
 # Step 10 — Assets & How to Run
 
@@ -256,7 +249,6 @@ RANKX(ALL('FactSales'[Region]), [Sales USD], , DESC, DENSE)
 
 * Sales USD ≈ **\$2.26M**, Orders ≈ **4.9K**, Customers = **793**, AOV ≈ **\$459**
 
----
 
 ## Notes / Limitations
 
